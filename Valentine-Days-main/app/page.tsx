@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import BackgroundMusic from '@/components/BackgroundMusic';
 import DomeGallery from '@/components/DomeGallery';
 import InteractionFlow from '@/components/InteractionFlow';
 import { assetPath } from '@/lib/asset-path';
@@ -13,28 +14,30 @@ const IMAGE_FILES = [
 
 export default function Home() {
   const [showGallery, setShowGallery] = useState(false);
+  const [userImages, setUserImages] = useState<string[]>([]);
 
-  const userImages = IMAGE_FILES.map((file) => assetPath(`/${file}`));
+  useEffect(() => {
+    setUserImages(IMAGE_FILES.map((file) => assetPath(`/${file}`)));
+  }, []);
 
   return (
     <main className="w-screen h-screen bg-[#060010]">
+      <BackgroundMusic active={showGallery} unlockOnInteract />
+
       {!showGallery ? (
         <InteractionFlow onFlowComplete={() => setShowGallery(true)} />
-      ) : (
-        <>
-          <audio src={assetPath('/pretty.mp3')} autoPlay loop className="hidden" />
-          <DomeGallery
-            images={userImages}
-            fit={0.8}
-            minRadius={600}
-            maxVerticalRotationDeg={0}
-            segments={34}
-            dragDampening={2}
-            grayscale={false}
-            autoRotationSpeed={0.1}
-          />
-        </>
-      )}
+      ) : userImages.length > 0 ? (
+        <DomeGallery
+          images={userImages}
+          fit={0.8}
+          minRadius={600}
+          maxVerticalRotationDeg={0}
+          segments={34}
+          dragDampening={2}
+          grayscale={false}
+          autoRotationSpeed={0.1}
+        />
+      ) : null}
     </main>
   );
 }
