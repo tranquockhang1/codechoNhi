@@ -3,28 +3,18 @@
 import { useState } from 'react';
 import DomeGallery from '@/components/DomeGallery';
 import InteractionFlow from '@/components/InteractionFlow';
+import { assetPath } from '@/lib/asset-path';
+
+const IMAGE_FILES = [
+  '1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg',
+  '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg',
+  '13.jpeg', '14.jpeg', '15.jpeg', '16.jpeg',
+] as const;
 
 export default function Home() {
   const [showGallery, setShowGallery] = useState(false);
 
-  const userImages = [
-    '/1.jpeg',
-    '/2.jpeg',
-    '/3.jpeg',
-    '/4.jpeg',
-    '/5.jpeg',
-    '/6.jpeg',
-    '/7.jpeg',
-    '/8.jpeg',
-    '/9.jpeg',
-    '/10.jpeg',
-    '/11.jpeg',
-    '/12.jpeg',
-    '/13.jpeg',
-    '/14.jpeg',
-    '/15.jpeg',
-    '/16.jpeg',
-  ];
+  const userImages = IMAGE_FILES.map((file) => assetPath(`/${file}`));
 
   return (
     <main className="w-screen h-screen bg-[#060010]">
@@ -32,7 +22,7 @@ export default function Home() {
         <InteractionFlow onFlowComplete={() => setShowGallery(true)} />
       ) : (
         <>
-          <audio src="/pretty.mp3" autoPlay loop className="hidden" />
+          <audio src={assetPath('/pretty.mp3')} autoPlay loop className="hidden" />
           <DomeGallery
             images={userImages}
             fit={0.8}
